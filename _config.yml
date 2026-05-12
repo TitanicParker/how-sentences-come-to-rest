@@ -1,10 +1,16 @@
 title: How Sentences Come to Rest
 description: The 54 Invariants in Fairy Tales
+url: https://titanicparker.github.io
+baseurl: /how-sentences-come-to-rest
+lang: en
 markdown: kramdown
-
 permalink: pretty
 
 plugins: []
+
+kramdown:
+  input: GFM
+  hard_wrap: false
 
 defaults:
   - scope:
