@@ -12,6 +12,14 @@ This book asks how.
 
 ---
 
+## Enter the Book
+
+- [Begin with Chapter 1](chapter-01/)
+- [Open the Atlas in Miniature](chapter-12/)
+- [Use the 54-position radial instrument](instrument.html)
+
+---
+
 ## Contents
 
 - [Author’s Note](authors-note/)
@@ -47,3 +55,9 @@ This book asks how.
 - [Chapter 14 — The Holographic Sentence](chapter-14/)
 - [Chapter 15 — Does a Story Land Once?](chapter-15/)
 - [Chapter 16 — The Field Is Many; the Landing Is One](chapter-16/)
+
+---
+
+## Instrument
+
+- [Atlas of Remainders — 54-position radial instrument](instrument.html)
