@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atlas of Remainders — 54-position radial instrument</title>
+  <style>
+    :root { --bg: #02030a; --fg: #f8fbff; --soft: rgba(248,251,255,.72); --faint: rgba(248,251,255,.24); --accent: #67e8f9; --accent-strong: #e0fbff; --readout: #fef9c3; --font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    html, body { width: 100%; min-height: 100%; margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); -webkit-tap-highlight-color: transparent; }
+    body { min-height: 100svh; display: grid; place-items: center; overflow: hidden; }
+    .book-link { position: fixed; z-index: 20; left: 14px; top: 14px; color: var(--readout); text-decoration: none; font: 700 12px var(--font); letter-spacing: .08em; text-transform: uppercase; background: rgba(2,3,10,.72); border: 1px solid rgba(254,249,195,.28); border-radius: 999px; padding: 8px 10px; }
+    .instrument-wrap { width: min(100vw, 720px); height: 100svh; position: relative; padding: max(8px, env(safe-area-inset-top)) 8px max(76px, env(safe-area-inset-bottom)); box-sizing: border-box; display: grid; place-items: center; }
+    svg { display: block; width: 100%; max-height: calc(100svh - 96px); height: auto; user-select: none; touch-action: manipulation; }
+    .static-band { fill: var(--fg); fill-rule: evenodd; opacity: .035; }
+    .static-ring { fill: none; stroke: var(--fg); stroke-width: 1.35; stroke-linejoin: round; opacity: .13; }
+    .static-spoke { fill: none; stroke: var(--fg); stroke-width: 1.25; stroke-linecap: round; opacity: .1; }
+    .selected-band { fill: var(--accent); fill-rule: evenodd; opacity: 0; transition: opacity 90ms linear; pointer-events: none; }
+    .selected-ring { fill: none; stroke: var(--accent-strong); stroke-width: 2.1; stroke-linejoin: round; opacity: 0; transition: opacity 90ms linear; pointer-events: none; }
+    .selected-spoke { fill: none; stroke: var(--accent); stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity 90ms linear; pointer-events: none; }
+    .selected-lock { fill: none; stroke: var(--readout); stroke-width: 2.25; opacity: 0; transition: opacity 90ms linear; pointer-events: none; }
+    .point { fill: var(--fg); stroke: var(--bg); stroke-width: 1.2; r: 7.2; opacity: .86; cursor: pointer; transition: opacity 90ms linear, r 90ms linear, fill 90ms linear; }
+    .point.selected { fill: var(--readout); r: 11.2; opacity: 1; }
+    .point.same-spoke { fill: var(--accent-strong); r: 7.25; opacity: .72; }
+    .point.same-ring { fill: var(--accent-strong); r: 7.05; opacity: .58; }
+    .point.same-band { fill: var(--fg); r: 6.7; opacity: .42; }
+    .point.other { fill: var(--fg); r: 5.7; opacity: .19; }
+    .origin { fill: var(--fg); opacity: .34; pointer-events: none; cursor: default; }
+    text { fill: var(--fg); font-family: var(--font); paint-order: stroke; stroke: var(--bg); stroke-width: 4.6; stroke-linejoin: round; }
+    .operator-label { font-size: 16px; font-weight: 520; letter-spacing: .01em; opacity: .58; transition: opacity 90ms linear, font-weight 90ms linear, fill 90ms linear; }
+    .operator-label.active { fill: var(--readout); font-weight: 720; opacity: 1; }
+    .orientation-label { font-size: 15px; font-weight: 520; opacity: .48; transition: opacity 90ms linear, font-weight 90ms linear, fill 90ms linear; }
+    .orientation-label.active { fill: var(--readout); font-weight: 700; opacity: .96; }
+    .remainder-label { font-size: 14px; font-weight: 520; opacity: 0; transition: opacity 90ms linear, font-weight 90ms linear, fill 90ms linear; }
+    .remainder-label.visible { opacity: .7; }
+    .remainder-label.active { fill: var(--readout); font-weight: 740; opacity: 1; }
+    .readout { position: fixed; left: max(12px, env(safe-area-inset-left)); right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); min-height: 48px; display: flex; align-items: center; justify-content: center; padding: 10px 12px; box-sizing: border-box; border: 1px solid rgba(254,249,195,.42); border-radius: 14px; background: rgba(2,3,10,.88); color: var(--readout); text-align: center; font-size: clamp(16px, 4.2vw, 22px); line-height: 1.24; font-weight: 650; letter-spacing: .005em; opacity: 0; transition: opacity 90ms linear; white-space: normal; text-wrap: balance; box-shadow: 0 0 0 1px rgba(103,232,249,.13); pointer-events: none; }
+    .readout.visible { opacity: 1; }
+    @media (max-width: 520px) { .instrument-wrap { width: 108vw; transform: translateY(-8px); } svg { max-height: calc(100svh - 104px); } }
+  </style>
+</head>
+<body>
+  <a class="book-link" href="./">← Book</a>
+  <main class="instrument-wrap">
+    <svg id="instrument" viewBox="0 0 760 760" role="img" aria-label="Atlas of Remainders 54-position radial instrument"></svg>
+    <div id="readout" class="readout" aria-live="polite"></div>
+  </main>
+<script>
+const SVG_NS="http://www.w3.org/2000/svg";
+const RADII=[44,66,88,130,152,174,216,238,260];
+const ANGLES=[0,60,120,180,240,300];
+const OPERATORS=["Distinction","Expansion","Relation","Correction","Integration","Closure"];
+const ORIENTATIONS=["Toward","Across","Away"];
+const REMAINDERS=["Is","With","Does"];
+const INVARIANT_TITLES=["Simple Placement","Twofold Division","Boundary Imposition","Identity Constriction","Absence Marking","Local Differentiation","Polar Opposition","Gradual Differentiation","Singular Selection","Outward Expansion","Divergent Movement","Branching Proliferation","Path Variation","Range Extension","Field Distribution","Multiple Pathways","Continuous Diffusion","Edge Growth","Direct Pairing","Mutual Counterbalance","Mirrored Response","Sequential Linkage","Mutual Adjustment","Cyclic Recurrence","Structural Alignment","Formal Correspondence","Relational Emergence","Incremental Adjustment","Priority Rebalancing","Load Transfer","Oppositional Test","Counterpart Resolution","Directional Pivot","Limit Recalibration","Directional Reversal","Structural Restoration","Functional Union","Frame Consolidation","Structural Interlock","System Alignment","Mutual Constraint","Role Integration","Equilibrium State","Dynamic Equilibrium","Convergent Stabilization","Established Fact","Identity Collapse","Final Enactment","Regular Determination","Necessary Implication","Generalized Production","Structural Invariance","Retrospective Reinterpretation","Complete Cessation"];
+const VIEWBOX=760,CX=VIEWBOX/2,CY=VIEWBOX/2,OUTER_RADIUS=RADII[RADII.length-1];
+const svg=document.getElementById("instrument"),readout=document.getElementById("readout");
+let hoveredId=null,lockedId=null; const points=buildPoints();
+const elements={points:new Map(),operatorLabels:[],orientationLabels:[],remainderLabels:new Map(),selectedBand:null,selectedRing:null,selectedSpoke:null,selectedLock:null};
+render(); updateState();
+function el(name,attrs={}){const node=document.createElementNS(SVG_NS,name);Object.entries(attrs).forEach(([k,v])=>node.setAttribute(k,String(v)));return node;}
+function polarToCartesian(radius,angleDeg){const theta=angleDeg*Math.PI/180;return{x:CX+radius*Math.cos(theta),y:CY-radius*Math.sin(theta)}}
+function bandIndexForRing(ring){return Math.floor((ring-1)/3)}
+function ringsForBand(band){return[band*3+1,band*3+2,band*3+3]}
+function remainderForRing(ring){return REMAINDERS[(ring-1)%3]}
+function invariantLabel(id){return `I${String(id).padStart(2,"0")}`}
+function invariantTitle(id){return INVARIANT_TITLES[id-1]}
+function buildPoints(){const output=[];let id=1;for(let ring=1;ring<=9;ring++){for(let spoke=0;spoke<6;spoke++){const radius=RADII[ring-1],angle=ANGLES[spoke],position=polarToCartesian(radius,angle),invariantId=spoke*9+ring;output.push({id,invariantId,ring,spoke,band:bandIndexForRing(ring),radius,angle,x:position.x,y:position.y});id++;}}return output;}
+function ringPath(ring){const ringPoints=points.filter(p=>p.ring===ring).sort((a,b)=>a.spoke-b.spoke);return ringPoints.map((p,i)=>`${i===0?"M":"L"} ${p.x} ${p.y}`).join(" ")+" Z";}
+function spokePath(spoke){const spokePoints=points.filter(p=>p.spoke===spoke).sort((a,b)=>a.ring-b.ring);return spokePoints.map((p,i)=>`${i===0?"M":"L"} ${p.x} ${p.y}`).join(" ");}
+function hexBandPath(innerRadius,outerRadius){const outer=ANGLES.map(a=>polarToCartesian(outerRadius,a));const inner=[...ANGLES].reverse().map(a=>polarToCartesian(innerRadius,a));return[outer.map((p,i)=>`${i===0?"M":"L"} ${p.x} ${p.y}`).join(" "),"Z",inner.map((p,i)=>`${i===0?"M":"L"} ${p.x} ${p.y}`).join(" "),"Z"].join(" ");}
+function bandBounds(band){const radii=ringsForBand(band).map(r=>RADII[r-1]);return{inner:radii[0]-11,outer:radii[2]+11,mid:(radii[0]+radii[2])/2};}
+function textAnchorForAngle(angle){if(angle===0)return"start";if(angle===180)return"end";return"middle";}
+function baselineForAngle(angle){if(angle===60||angle===120)return"baseline";if(angle===240||angle===300)return"hanging";return"middle";}
+function pointState(point,selected){if(!selected)return"idle";if(point.id===selected.id)return"selected";if(point.spoke===selected.spoke)return"same-spoke";if(point.ring===selected.ring)return"same-ring";if(point.band===selected.band)return"same-band";return"other";}
+function render(){svg.appendChild(el("rect",{width:VIEWBOX,height:VIEWBOX,fill:"#02030a"}));const staticBands=el("g");[0,1,2].forEach(b=>{const bounds=bandBounds(b);staticBands.appendChild(el("path",{class:"static-band",d:hexBandPath(bounds.inner,bounds.outer)}));});svg.appendChild(staticBands);const staticRings=el("g");RADII.forEach((_,i)=>staticRings.appendChild(el("path",{class:"static-ring",d:ringPath(i+1)})));svg.appendChild(staticRings);const staticSpokes=el("g");ANGLES.forEach((_,spoke)=>staticSpokes.appendChild(el("path",{class:"static-spoke",d:spokePath(spoke)})));svg.appendChild(staticSpokes);elements.selectedBand=el("path",{class:"selected-band"});elements.selectedRing=el("path",{class:"selected-ring"});elements.selectedSpoke=el("path",{class:"selected-spoke"});elements.selectedLock=el("circle",{class:"selected-lock",r:16});svg.appendChild(elements.selectedBand);svg.appendChild(elements.selectedRing);svg.appendChild(elements.selectedSpoke);svg.appendChild(elements.selectedLock);const operatorGroup=el("g");ANGLES.forEach((angle,spoke)=>{const position=polarToCartesian(OUTER_RADIUS+34,angle);const label=el("text",{class:"operator-label",x:position.x,y:position.y,"text-anchor":textAnchorForAngle(angle),"dominant-baseline":baselineForAngle(angle)});label.textContent=OPERATORS[spoke];elements.operatorLabels[spoke]=label;operatorGroup.appendChild(label);});svg.appendChild(operatorGroup);const orientationGroup=el("g");[0,1,2].forEach(band=>{const bounds=bandBounds(band);const position=polarToCartesian(bounds.mid,-26);const label=el("text",{class:"orientation-label",x:position.x+16,y:position.y,"text-anchor":"start","dominant-baseline":"middle"});label.textContent=ORIENTATIONS[band];elements.orientationLabels[band]=label;orientationGroup.appendChild(label);});svg.appendChild(orientationGroup);const remainderGroup=el("g");[0,1,2].forEach(band=>{ringsForBand(band).forEach(ring=>{const radius=RADII[ring-1],position=polarToCartesian(radius,-8);const label=el("text",{class:"remainder-label",x:position.x+14,y:position.y,"text-anchor":"start","dominant-baseline":"middle"});label.textContent=remainderForRing(ring);elements.remainderLabels.set(ring,label);remainderGroup.appendChild(label);});});svg.appendChild(remainderGroup);svg.appendChild(el("circle",{class:"origin",cx:CX,cy:CY,r:4.8}));const pointGroup=el("g");points.forEach(point=>{const node=el("circle",{class:"point",cx:point.x,cy:point.y,r:7.2,tabindex:0,role:"button","aria-label":`${invariantLabel(point.invariantId)}, ${OPERATORS[point.spoke]}, ${ORIENTATIONS[point.band]}, ${remainderForRing(point.ring)}, ${invariantTitle(point.invariantId)}`});node.addEventListener("mouseenter",()=>{hoveredId=point.id;updateState();});node.addEventListener("focus",()=>{hoveredId=point.id;updateState();});node.addEventListener("mouseleave",()=>{hoveredId=null;updateState();});node.addEventListener("blur",()=>{hoveredId=null;updateState();});node.addEventListener("click",()=>{lockedId=lockedId===point.id?null:point.id;updateState();});node.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();lockedId=lockedId===point.id?null:point.id;updateState();}});elements.points.set(point.id,node);pointGroup.appendChild(node);});svg.appendChild(pointGroup);svg.addEventListener("mouseleave",()=>{hoveredId=null;updateState();});}
+function updateState(){const activeId=hoveredId??lockedId;const selected=activeId?points.find(p=>p.id===activeId):null;points.forEach(point=>{elements.points.get(point.id).setAttribute("class",`point ${pointState(point,selected)}`);});elements.operatorLabels.forEach((label,spoke)=>label.setAttribute("class",selected&&selected.spoke===spoke?"operator-label active":"operator-label"));elements.orientationLabels.forEach((label,band)=>label.setAttribute("class",selected&&selected.band===band?"orientation-label active":"orientation-label"));elements.remainderLabels.forEach((label,ring)=>{let c="remainder-label";if(selected&&bandIndexForRing(ring)===selected.band)c+=" visible";if(selected&&ring===selected.ring)c+=" active";label.setAttribute("class",c);});if(selected){const bounds=bandBounds(selected.band);elements.selectedBand.setAttribute("d",hexBandPath(bounds.inner,bounds.outer));elements.selectedBand.style.opacity="0.13";elements.selectedRing.setAttribute("d",ringPath(selected.ring));elements.selectedRing.style.opacity="0.92";elements.selectedSpoke.setAttribute("d",spokePath(selected.spoke));elements.selectedSpoke.style.opacity="0.9";elements.selectedLock.setAttribute("cx",selected.x);elements.selectedLock.setAttribute("cy",selected.y);elements.selectedLock.style.opacity="1";readout.textContent=`${invariantLabel(selected.invariantId)} · ${OPERATORS[selected.spoke]} · ${ORIENTATIONS[selected.band]} · ${remainderForRing(selected.ring)} — ${invariantTitle(selected.invariantId)}`;readout.classList.add("visible");}else{elements.selectedBand.style.opacity="0";elements.selectedRing.style.opacity="0";elements.selectedSpoke.style.opacity="0";elements.selectedLock.style.opacity="0";readout.textContent="";readout.classList.remove("visible");}}
+</script>
+</body>
+</html>
