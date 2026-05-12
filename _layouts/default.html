@@ -5,19 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
     <meta name="description" content="{{ site.description }}">
+    <meta name="theme-color" content="#08070b">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   </head>
   <body>
+    <div class="reading-progress" aria-hidden="true"><span id="reading-progress-bar"></span></div>
+
     <div class="page-shell">
       <aside class="site-rail" aria-label="Book navigation">
-        <a class="site-mark" href="{{ '/' | relative_url }}">HSCR</a>
+        <a class="site-mark" href="{{ '/' | relative_url }}" aria-label="How Sentences Come to Rest home">HSCR</a>
         <nav class="rail-nav">
           <a href="{{ '/' | relative_url }}">Contents</a>
           <a href="{{ '/chapter-01/' | relative_url }}">Begin</a>
           <a href="{{ '/chapter-12/' | relative_url }}">Atlas</a>
+          <a href="{{ '/instrument.html' | relative_url }}">Instrument</a>
         </nav>
       </aside>
 
@@ -27,5 +31,17 @@
         </article>
       </main>
     </div>
+
+    <script>
+      const bar = document.getElementById('reading-progress-bar');
+      function updateProgress() {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+        bar.style.transform = `scaleX(${pct})`;
+      }
+      updateProgress();
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
+    </script>
   </body>
 </html>
