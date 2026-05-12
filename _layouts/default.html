@@ -3,15 +3,20 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="{{ '/' | relative_url }}">
     <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
     <meta name="description" content="{{ site.description }}">
     <meta name="theme-color" content="#08070b">
+    <meta property="og:title" content="{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}">
+    <meta property="og:description" content="{{ site.description }}">
+    <meta property="og:type" content="book">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to book text</a>
     <div class="reading-progress" aria-hidden="true"><span id="reading-progress-bar"></span></div>
 
     <div class="page-shell">
@@ -25,7 +30,7 @@
         </nav>
       </aside>
 
-      <main class="book-page">
+      <main id="main-content" class="book-page">
         <article class="book-card">
           {{ content }}
         </article>
@@ -42,6 +47,12 @@
       updateProgress();
       window.addEventListener('scroll', updateProgress, { passive: true });
       window.addEventListener('resize', updateProgress);
+      document.addEventListener('keydown', event => {
+        if (event.target && ['INPUT', 'TEXTAREA'].includes(event.target.tagName)) return;
+        if (event.key === 'g') window.location.href = '{{ '/' | relative_url }}';
+        if (event.key === 'a') window.location.href = '{{ '/chapter-12/' | relative_url }}';
+        if (event.key === 'i') window.location.href = '{{ '/instrument.html' | relative_url }}';
+      });
     </script>
   </body>
 </html>
