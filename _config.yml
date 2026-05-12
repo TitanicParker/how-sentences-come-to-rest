@@ -1,0 +1,13 @@
+title: How Sentences Come to Rest
+description: The 54 Invariants in Fairy Tales
+markdown: kramdown
+
+permalink: pretty
+
+plugins: []
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
