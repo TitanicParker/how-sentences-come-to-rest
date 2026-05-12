@@ -1,0 +1,80 @@
+name: Build PDF edition
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - book.pdf
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Pandoc and XeLaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-xetex texlive-latex-recommended texlive-fonts-recommended
+
+      - name: Assemble manuscript
+        run: |
+          mkdir -p build
+          cat > build/book.md <<'EOF'
+          % How Sentences Come to Rest
+          % The 54 Invariants in Fairy Tales
+          %
+          EOF
+          for f in \
+            authors-note.md \
+            preface.md \
+            note-on-level.md \
+            note-on-provenance.md \
+            how-to-read.md \
+            chapter-01.md \
+            chapter-02.md \
+            chapter-03.md \
+            chapter-04.md \
+            chapter-05.md \
+            chapter-06.md \
+            chapter-07.md \
+            chapter-08.md \
+            chapter-09.md \
+            chapter-10.md \
+            chapter-11.md \
+            chapter-12.md \
+            chapter-13.md \
+            chapter-14.md \
+            chapter-15.md \
+            chapter-16.md
+          do
+            printf '\n\n\\newpage\n\n' >> build/book.md
+            sed '/^---$/d; /^\[.*Contents.*\]$/d; /^\[←/d' "$f" >> build/book.md
+          done
+
+      - name: Build PDF
+        run: |
+          pandoc build/book.md \
+            -o book.pdf \
+            --pdf-engine=xelatex \
+            -V documentclass=book \
+            -V geometry:margin=1in \
+            -V mainfont="Latin Modern Roman" \
+            -V colorlinks=true \
+            -V linkcolor=black \
+            -V urlcolor=black
+
+      - name: Commit PDF if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet -- book.pdf; then
+            git add book.pdf
+            git commit -m "Build downloadable PDF edition"
+            git push
+          fi
