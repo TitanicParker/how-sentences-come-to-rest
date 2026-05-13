@@ -24,17 +24,6 @@ This book asks how.
 
 ---
 
-## Book II
-
-**The Atlas of Remainders** is the second book beneath this one. It extends the first book into a field guide to the 54 invariant landings produced by:
-
-**Operator · Orientation · Terminal Mode → Invariant**
-
-- [Open Book II — The Atlas of Remainders](books/02-atlas-of-remainders/)
-- [Read the Book II manuscript files](books/02-atlas-of-remainders/README.md)
-
----
-
 ## Contents
 
 - [Author’s Note](authors-note/)
@@ -70,6 +59,16 @@ This book asks how.
 - [Chapter 14 — The Holographic Sentence](chapter-14/)
 - [Chapter 15 — Does a Story Land Once?](chapter-15/)
 - [Chapter 16 — The Field Is Many; the Landing Is One](chapter-16/)
+
+---
+
+## Book II
+
+**The Atlas of Remainders** extends this book into a field guide to the 54 invariant landings:
+
+**Operator · Orientation · Terminal Mode → Invariant**
+
+- [Open Book II — The Atlas of Remainders](books/02-atlas-of-remainders/)
 
 ---
 
