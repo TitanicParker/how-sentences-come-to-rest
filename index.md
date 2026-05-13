@@ -10,6 +10,8 @@ The story is already understood.
 
 This book asks how.
 
+![Fairy-tale atlas hero](ChatGPT%20Image%20May%2013%2C%202026%2C%2012_09_29%20PM.png)
+
 ---
 
 ## Enter the Book
@@ -17,6 +19,7 @@ This book asks how.
 - [Begin with Chapter 1](chapter-01/)
 - [Open the Atlas in Miniature](chapter-12/)
 - [Use the 54-position radial instrument](instrument.html)
+- [Use the sentence landing instrument](landing-instrument.html)
 - [Download the PDF edition](book.pdf)
 
 ---
@@ -63,6 +66,7 @@ This book asks how.
 
 - [Download the PDF edition](book.pdf)
 
-## Instrument
+## Instruments
 
 - [Atlas of Remainders — 54-position radial instrument](instrument.html)
+- [Sentence Landing Instrument](landing-instrument.html)
