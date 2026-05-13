@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Sentence Landing Instrument</title>
+  <style>
+    :root {
+      --bg: #08070b;
+      --paper: #fffaf0;
+      --paper-soft: #f7ecd8;
+      --ink: #1d1712;
+      --muted: #74675b;
+      --line: rgba(29,23,18,.16);
+      --gold: #b98532;
+      --gold-strong: #7b4f12;
+      --gold-soft: rgba(185,133,50,.14);
+      --shadow: rgba(0,0,0,.28);
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      padding: 24px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(185,133,50,.24), transparent 30rem),
+        radial-gradient(circle at 88% 20%, rgba(255,250,240,.12), transparent 28rem),
+        linear-gradient(135deg, #050409 0%, #15101a 54%, #060508 100%);
+      font-family: var(--sans);
+    }
+    .container { max-width: 980px; margin: 0 auto; }
+    .topline { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; }
+    .book-link { color:#fffaf0; text-decoration:none; font:800 12px var(--sans); letter-spacing:.1em; text-transform:uppercase; border:1px solid rgba(255,250,240,.24); border-radius:999px; padding:9px 12px; background:rgba(8,7,11,.72); }
+    .intro, .step, .receipt {
+      background: linear-gradient(180deg, rgba(255,250,240,.985), rgba(247,236,216,.985));
+      border: 1px solid rgba(255,250,240,.72);
+      border-radius: 24px;
+      padding: clamp(18px, 4vw, 32px);
+      margin-bottom: 16px;
+      box-shadow: 0 24px 70px var(--shadow);
+    }
+    h1, h2 { font-family: var(--serif); line-height: 1; letter-spacing: -.045em; color: var(--ink); }
+    h1 { margin: 0 0 10px; font-size: clamp(2.8rem, 7vw, 5.4rem); font-weight: 650; }
+    h2 { margin: 0 0 10px; font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 650; }
+    p { margin: 0 0 12px; font-family: var(--serif); font-size: clamp(1.16rem, 2vw, 1.36rem); line-height: 1.55; }
+    .muted { color: var(--muted); }
+    .small { font-family: var(--sans); font-size: .9rem; line-height: 1.45; }
+    .rule { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .status { display:inline-block; font:800 11px var(--sans); letter-spacing:.1em; text-transform:uppercase; padding:5px 9px; border-radius:999px; background:rgba(29,23,18,.07); color:var(--muted); margin-bottom:12px; }
+    .status.done { background: rgba(185,133,50,.18); color: var(--gold-strong); }
+    .question { font:800 .92rem var(--sans); letter-spacing:.02em; margin: 12px 0 10px; color:#2c2119; }
+    textarea, input[type="text"] { width:100%; border:1px solid var(--line); border-radius:14px; padding:13px 14px; font: 500 1rem/1.45 var(--sans); background:rgba(255,255,255,.62); color:var(--ink); outline:none; }
+    textarea { min-height: 92px; resize: vertical; }
+    textarea:focus, input[type="text"]:focus { border-color: rgba(185,133,50,.58); box-shadow:0 0 0 4px rgba(185,133,50,.12); }
+    .two-fields { display:grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .option-list { display:grid; gap:10px; margin-bottom:14px; }
+    .option { border:1px solid var(--line); border-radius:16px; padding:13px; background:rgba(255,255,255,.42); transition: background 140ms ease, border-color 140ms ease, transform 140ms ease; }
+    .option:hover { background:rgba(185,133,50,.09); border-color:rgba(185,133,50,.32); transform: translateY(-1px); }
+    .option label { display:block; cursor:pointer; }
+    .option input { margin-right:9px; accent-color: var(--gold-strong); }
+    .option-title { font:800 1rem var(--sans); }
+    .option-copy { color:var(--muted); margin-top:5px; padding-left:27px; font:500 .94rem/1.45 var(--sans); }
+    button { appearance:none; border:1px solid var(--gold-strong); background:var(--gold-strong); color:#fffaf0; border-radius:999px; padding:11px 16px; font:800 .9rem var(--sans); letter-spacing:.02em; cursor:pointer; }
+    button.secondary { background:transparent; color:var(--gold-strong); }
+    button:disabled { opacity:.45; cursor:not-allowed; }
+    .step.locked { opacity:.56; }
+    .step.readonly .option input, .step.readonly textarea, .step.readonly input[type="text"] { pointer-events:none; }
+    .ending-card { border:1px solid var(--line); border-radius:18px; padding:16px; background:rgba(255,255,255,.42); margin: 12px 0 14px; }
+    .ending-title { font:900 .9rem var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--gold-strong); margin-bottom:8px; }
+    .hidden { display:none; }
+    .receipt-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .receipt-item { border:1px solid var(--line); border-radius:16px; padding:13px; background:rgba(255,255,255,.42); }
+    .receipt-item.full { grid-column:1 / -1; }
+    .receipt-label { font:900 11px var(--sans); text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:6px; }
+    .receipt-value { font:600 1rem/1.45 var(--sans); }
+    .invariant-name { font-family:var(--serif); font-size:1.6rem; line-height:1.05; letter-spacing:-.02em; }
+    @media (max-width: 740px) {
+      body { padding: 10px 8px max(20px, env(safe-area-inset-bottom)); }
+      .topline { position:sticky; top:0; z-index:5; padding: calc(8px + env(safe-area-inset-top)) 0 8px; background:rgba(8,7,11,.82); backdrop-filter:blur(18px); }
+      .two-fields, .receipt-grid { grid-template-columns:1fr; }
+      .intro, .step, .receipt { border-radius:20px; padding:20px 17px; }
+      h1 { font-size: clamp(2.45rem, 14vw, 4rem); }
+      p { font-size:1.12rem; }
+      .option-copy { font-size:.88rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topline"><a class="book-link" href="./">← Back to book</a></div>
+
+    <section class="intro">
+      <h1>Sentence Landing Instrument</h1>
+      <p class="muted">A sequential aid for walking a sentence to its invariant. The name comes last.</p>
+      <div class="two-fields">
+        <div>
+          <div class="question">Sentence</div>
+          <textarea id="sentenceInput" placeholder="Enter the sentence you are holding still."></textarea>
+        </div>
+        <div>
+          <div class="question">Act being classified</div>
+          <textarea id="actInput" placeholder="Example: The house remains unchanged after the wolf’s pressure."></textarea>
+        </div>
+      </div>
+      <p class="small muted rule">Do not classify by word, object, or resemblance. Fix the act first; then ask how it lands.</p>
+    </section>
+
+    <section class="step" id="step1">
+      <div class="status" id="status1">Step 1</div>
+      <h2>Remainder</h2>
+      <p class="muted">Decide what kind of residue is left when the sentence comes to rest.</p>
+      <div class="question">What remains?</div>
+      <div class="option-list">
+        <div class="option"><label><input type="radio" name="remainder" value="is"><span class="option-title">Is</span><div class="option-copy">A state, identity, condition, placement, status, fact, or settled standing remains.</div></label></div>
+        <div class="option"><label><input type="radio" name="remainder" value="with"><span class="option-title">With</span><div class="option-copy">A held relation, plurality, balance, pairing, dependency, field, or tension remains.</div></label></div>
+        <div class="option"><label><input type="radio" name="remainder" value="does"><span class="option-title">Does</span><div class="option-copy">An enacted result remains: an act done, transformation completed, or operation carried through.</div></label></div>
+      </div>
+      <button id="confirmRemainder">Commit remainder</button>
+    </section>
+
+    <section class="step locked" id="step2">
+      <div class="status" id="status2">Locked</div>
+      <h2>Orientation</h2>
+      <p class="muted">Decide where attention resolves when the sentence lands.</p>
+      <div class="question">Where does attention come to rest?</div>
+      <div class="option-list">
+        <div class="option"><label><input type="radio" name="orientation" value="toward"><span class="option-title">Toward</span><div class="option-copy">Attention gathers toward a focal point, object, result, fact, identity, or decision.</div></label></div>
+        <div class="option"><label><input type="radio" name="orientation" value="across"><span class="option-title">Across</span><div class="option-copy">Attention holds across a field, relation, comparison, distribution, sequence, or retained plurality.</div></label></div>
+        <div class="option"><label><input type="radio" name="orientation" value="away"><span class="option-title">Away</span><div class="option-copy">Attention releases, excludes, reverses, departs, ceases, or remains after a field withdraws.</div></label></div>
+      </div>
+      <button id="confirmOrientation" disabled>Commit orientation</button>
+    </section>
+
+    <section class="step locked" id="step3">
+      <div class="status" id="status3">Locked</div>
+      <h2>Landing Shape Check</h2>
+      <p class="muted">This is a verification checkpoint, not the name of the invariant.</p>
+      <div class="ending-card">
+        <div class="ending-title" id="endingTitle">No landing shape available yet.</div>
+        <div id="endingCopy" class="muted">Commit remainder and orientation first.</div>
+      </div>
+      <button id="confirmEnding" disabled>This shape matches the act</button>
+    </section>
+
+    <section class="step locked" id="step4">
+      <div class="status" id="status4">Locked</div>
+      <h2>Operator</h2>
+      <p class="muted">Select the dominant transformation that produces rest.</p>
+      <div class="question">What produces the landing?</div>
+      <div class="option-list">
+        <div class="option"><label><input type="radio" name="operator" value="distinction"><span class="option-title">Distinction</span><div class="option-copy">Difference becomes operative: marking, selection, boundary, exclusion, identification.</div></label></div>
+        <div class="option"><label><input type="radio" name="operator" value="expansion"><span class="option-title">Expansion</span><div class="option-copy">Availability opens: path, range, branching, spread, growth, possibility.</div></label></div>
+        <div class="option"><label><input type="radio" name="operator" value="relation"><span class="option-title">Relation</span><div class="option-copy">Terms answer one another through dependence, correspondence, sequence, balance, recurrence.</div></label></div>
+        <div class="option"><label><input type="radio" name="operator" value="correction"><span class="option-title">Correction</span><div class="option-copy">Standing changes through adjustment, reweighting, transfer, test, pivot, reversal, restoration.</div></label></div>
+        <div class="option"><label><input type="radio" name="operator" value="integration"><span class="option-title">Integration</span><div class="option-copy">Parts become one working arrangement: union, frame, interlock, system, role, equilibrium.</div></label></div>
+        <div class="option"><label><input type="radio" name="operator" value="closure"><span class="option-title">Closure</span><div class="option-copy">Further demand ends: fact, completion, implication, invariance, reinterpretation, cessation.</div></label></div>
+      </div>
+      <button id="confirmOperator" disabled>Commit operator</button>
+    </section>
+
+    <section class="receipt hidden" id="step5">
+      <div class="status done">Landing Receipt</div>
+      <h2>Invariant</h2>
+      <p class="muted">Operator, orientation, and remainder are committed. The name is disclosed last.</p>
+      <div class="receipt-grid">
+        <div class="receipt-item full"><div class="receipt-label">Sentence</div><div class="receipt-value" id="receiptSentence"></div></div>
+        <div class="receipt-item full"><div class="receipt-label">Act</div><div class="receipt-value" id="receiptAct"></div></div>
+        <div class="receipt-item"><div class="receipt-label">Operator</div><div class="receipt-value" id="receiptOperator"></div></div>
+        <div class="receipt-item"><div class="receipt-label">Orientation</div><div class="receipt-value" id="receiptOrientation"></div></div>
+        <div class="receipt-item"><div class="receipt-label">Remainder</div><div class="receipt-value" id="receiptRemainder"></div></div>
+        <div class="receipt-item"><div class="receipt-label">Invariant</div><div class="receipt-value invariant-name" id="receiptInvariant"></div></div>
+        <div class="receipt-item full"><div class="receipt-label">Receipt phrase</div><div class="receipt-value" id="receiptXY"></div></div>
+        <div class="receipt-item full"><div class="receipt-label">Description</div><div class="receipt-value" id="receiptDescription"></div></div>
+        <div class="receipt-item full"><div class="receipt-label">Rival test</div><div class="receipt-value">Ask which nearest rival almost entered, and why it cannot govern this landing.</div></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const landingShapes = {
+      toward_is: { title: 'Toward · Is', text: 'Attention gathers to a focal state. The act leaves what is the case as a stable placement, condition, identity, or fact.' },
+      toward_with: { title: 'Toward · With', text: 'Attention gathers to a focal relation. The act leaves terms held together at the point of convergence.' },
+      toward_does: { title: 'Toward · Does', text: 'Attention gathers to a focal enactment. The act is carried into a completed result.' },
+      across_is: { title: 'Across · Is', text: 'Attention holds across a field while leaving a state, status, or condition distributed across that field.' },
+      across_with: { title: 'Across · With', text: 'Attention remains in the between. The act leaves a held relation, balance, dependency, or plurality.' },
+      across_does: { title: 'Across · Does', text: 'Attention tracks an enactment across a field. The act completes as a distributed operation.' },
+      away_is: { title: 'Away · Is', text: 'Attention releases from a prior field or pressure and leaves a stable state after withdrawal.' },
+      away_with: { title: 'Away · With', text: 'Attention releases while leaving a relation reheld, reversed, graded, or reconfigured.' },
+      away_does: { title: 'Away · Does', text: 'Attention follows an act into release, exhaustion, selection, restoration, or cessation.' }
+    };
+
+    const remainderOrder = ['is','with','does'];
+    const orientationOrder = ['toward','across','away'];
+    const titleCase = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+    const operators = {
+      distinction: { offset: 0, names: ['Simple Placement','Twofold Division','Boundary Imposition','Identity Constriction','Absence Marking','Local Differentiation','Polar Opposition','Gradual Differentiation','Singular Selection'] },
+      expansion: { offset: 9, names: ['Outward Expansion','Divergent Movement','Branching Proliferation','Path Variation','Range Extension','Field Distribution','Multiple Pathways','Continuous Diffusion','Edge Growth'] },
+      relation: { offset: 18, names: ['Direct Pairing','Mutual Counterbalance','Mirrored Response','Sequential Linkage','Mutual Adjustment','Cyclic Recurrence','Structural Alignment','Formal Correspondence','Relational Emergence'] },
+      correction: { offset: 27, names: ['Incremental Adjustment','Priority Rebalancing','Load Transfer','Oppositional Test','Counterpart Resolution','Directional Pivot','Limit Recalibration','Directional Reversal','Structural Restoration'] },
+      integration: { offset: 36, names: ['Functional Union','Frame Consolidation','Structural Interlock','System Alignment','Mutual Constraint','Role Integration','Equilibrium State','Dynamic Equilibrium','Convergent Stabilization'] },
+      closure: { offset: 45, names: ['Established Fact','Identity Collapse','Final Enactment','Regular Determination','Necessary Implication','Generalized Production','Structural Invariance','Retrospective Reinterpretation','Complete Cessation'] }
+    };
+
+    const xy = {
+      distinction: ['X is simply placed as Y.','X is divided into a held twofold field.','X imposes a boundary on Y.','X is constrained as the admissible identity.','X marks the absence of Y.','X differentiates Y within scope S.','X stands opposed to Y.','X differs from Y by degree.','X is selected as alternatives fall away.'],
+      expansion: ['X opens outward into Y.','X opens into retained paths.','X branches into multiple results.','X reaches Y by another route.','X extends reach across a field.','X distributes across the field.','X leaves future paths available.','X diffuses gradually into Y.','X grows at its edge.'],
+      relation: ['X pairs directly with Y.','X balances with Y around a pivot.','X mirrors Y.','X leads sequentially to Y.','X co-varies with Y.','X returns cyclically with Y.','X aligns structurally with Y.','X corresponds formally with Y.','Local X-relations produce global Y.'],
+      correction: ['X shifts slightly toward corrected standing.','X reweights priority with Y.','X transfers load into Y.','X is tested by opposition.','X resolves through its counterpart.','X pivots direction after prior standing fails.','X resets its limit.','X reverses direction while continuity remains.','X returns from disorder into restored structure.'],
+      integration: ['X and Y form a working unit.','X and Y consolidate under one frame.','X and Y interlock into a system.','X aligns inside structural matrix Y.','X and Y mutually constrain one another.','X fulfills its role within Y.','X settles into balanced state.','X and Y remain balanced through motion.','Multiple paths converge into stable Y.'],
+      closure: ['X settles as established fact.','X and Y collapse into one identity.','X is carried through to completion.','X holds regularly across cases.','X necessarily implies Y under condition C.','X generally produces Y.','X remains Y under pressure or transformation.','X reinterprets earlier Y after completion.','X ceases completely.']
+    };
+
+    const descriptions = {
+      distinction: 'Difference produces rest.', expansion: 'Opening produces rest.', relation: 'Dependence produces rest.', correction: 'Changed standing produces rest.', integration: 'Functional unity produces rest.', closure: 'Further demand ends.'
+    };
+
+    const state = { sentence:'', act:'', remainder:null, orientation:null, operator:null };
+    const sentenceInput = document.getElementById('sentenceInput');
+    const actInput = document.getElementById('actInput');
+    const confirmRemainder = document.getElementById('confirmRemainder');
+    const confirmOrientation = document.getElementById('confirmOrientation');
+    const confirmEnding = document.getElementById('confirmEnding');
+    const confirmOperator = document.getElementById('confirmOperator');
+
+    function selectedValue(name) { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : null; }
+    function lockStep(stepId, statusId, label) { const step = document.getElementById(stepId); step.classList.add('readonly'); step.classList.remove('locked'); const status = document.getElementById(statusId); status.textContent = label; status.classList.add('done'); }
+    function unlockStep(stepId, statusId, label) { const step = document.getElementById(stepId); step.classList.remove('locked'); const status = document.getElementById(statusId); status.textContent = label; }
+    function updateLandingShape() { if (!state.remainder || !state.orientation) return; const key = `${state.orientation}_${state.remainder}`; document.getElementById('endingTitle').textContent = landingShapes[key].title; document.getElementById('endingCopy').textContent = landingShapes[key].text; confirmEnding.disabled = false; }
+    function computeInvariant() { const r = remainderOrder.indexOf(state.remainder); const o = orientationOrder.indexOf(state.orientation); const localIndex = o * 3 + r; const op = operators[state.operator]; return { localIndex, number: op.offset + localIndex + 1, name: op.names[localIndex], phrase: xy[state.operator][localIndex], description: descriptions[state.operator] }; }
+    function renderReceipt() { const out = computeInvariant(); document.getElementById('step5').classList.remove('hidden'); document.getElementById('receiptSentence').textContent = state.sentence; document.getElementById('receiptAct').textContent = state.act; document.getElementById('receiptOperator').textContent = titleCase(state.operator); document.getElementById('receiptOrientation').textContent = titleCase(state.orientation); document.getElementById('receiptRemainder').textContent = titleCase(state.remainder); document.getElementById('receiptInvariant').textContent = `${out.name} · I${String(out.number).padStart(2,'0')}`; document.getElementById('receiptXY').textContent = out.phrase; document.getElementById('receiptDescription').textContent = out.description; document.getElementById('step5').scrollIntoView({ behavior:'smooth', block:'start' }); }
+
+    confirmRemainder.addEventListener('click', () => { const value = selectedValue('remainder'); const sentence = sentenceInput.value.trim(); const act = actInput.value.trim(); if (!sentence || !act || !value) return; state.sentence = sentence; state.act = act; state.remainder = value; sentenceInput.setAttribute('readonly','readonly'); actInput.setAttribute('readonly','readonly'); lockStep('step1','status1','Remainder committed'); unlockStep('step2','status2','Step 2'); confirmOrientation.disabled = false; });
+    confirmOrientation.addEventListener('click', () => { const value = selectedValue('orientation'); if (!value) return; state.orientation = value; lockStep('step2','status2','Orientation committed'); unlockStep('step3','status3','Step 3'); updateLandingShape(); });
+    confirmEnding.addEventListener('click', () => { lockStep('step3','status3','Landing shape verified'); unlockStep('step4','status4','Step 4'); confirmOperator.disabled = false; });
+    confirmOperator.addEventListener('click', () => { const value = selectedValue('operator'); if (!value) return; state.operator = value; lockStep('step4','status4','Operator committed'); renderReceipt(); });
+  </script>
+</body>
+</html>
