@@ -1,0 +1,72 @@
+body.book-two {
+  --gold: #a8772d;
+  --gold-soft: rgba(168, 119, 45, 0.16);
+  --book-two-cyan: #2f8fa3;
+  --book-two-violet: #7d6fb2;
+  --book-two-rose: #9f5969;
+}
+
+body.book-two .reading-progress span {
+  background: linear-gradient(90deg, #a8772d, #2f8fa3, #7d6fb2);
+}
+
+body.book-two .site-mark {
+  box-shadow: 0 0 30px rgba(47, 143, 163, 0.18);
+}
+
+body.book-two .book-card {
+  background:
+    linear-gradient(180deg, rgba(255, 250, 240, 0.988), rgba(247, 236, 216, 0.988));
+  border-color: rgba(47, 143, 163, 0.2);
+}
+
+body.book-two h1::after {
+  content: "Book II";
+  display: block;
+  margin-top: 0.8rem;
+  font: 700 0.72rem var(--sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--book-two-cyan);
+}
+
+body.book-two h2 {
+  border-top-color: rgba(47, 143, 163, 0.16);
+}
+
+body.book-two a {
+  color: #246f7f;
+}
+
+body.book-two a:hover {
+  color: #174a54;
+}
+
+body.book-two blockquote {
+  border-left-color: var(--book-two-cyan);
+}
+
+body.book-two code {
+  background: rgba(47, 143, 163, 0.12);
+}
+
+body.book-two .book-card > p:first-of-type {
+  color: #342920;
+}
+
+body.book-two .book-card strong {
+  color: #50340b;
+}
+
+body.book-two .book-card h2 strong,
+body.book-two .book-card p strong:first-child:last-child {
+  color: #215c68;
+}
+
+body.book-two .book-card ul li::marker {
+  color: var(--book-two-cyan);
+}
+
+body.book-two .book-card hr {
+  background: linear-gradient(90deg, transparent, rgba(47, 143, 163, 0.24), transparent);
+}
