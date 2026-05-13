@@ -23,10 +23,13 @@ This book is not a taxonomy of meanings. It is a field guide to landings. Each i
 - [`parts/03-relation.md`](./parts/03-relation.md) — Relation chapters, I19–I27.
 - [`parts/04-correction.md`](./parts/04-correction.md) — Correction chapters, I28–I36.
 - [`parts/05-integration.md`](./parts/05-integration.md) — Integration chapters, I37–I45.
+- [`parts/06-closure.md`](./parts/06-closure.md) — Closure chapters, I46–I54.
 
-## Remaining parts
+## Remaining editorial work
 
-- `parts/06-closure.md` — Closure chapters, I46–I54.
+- `parts/07-boundary-conflict-plates.md` — cross-cell diagnostic plates.
+- Compile or reorganize `manuscript.md` from the six drafted parts.
+- Run a consistency pass across all 54 invariant chapters.
 
 ## Chapter method
 
