@@ -2,51 +2,133 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Atlas of Remainders — 54-position radial instrument</title>
   <style>
-    :root { --bg: #02030a; --fg: #f8fbff; --soft: rgba(248,251,255,.72); --faint: rgba(248,251,255,.24); --accent: #67e8f9; --accent-strong: #e0fbff; --readout: #fef9c3; --font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    html, body { width: 100%; min-height: 100%; margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); -webkit-tap-highlight-color: transparent; }
-    body { min-height: 100svh; display: grid; place-items: center; overflow: hidden; }
-    .book-link { position: fixed; z-index: 20; left: 14px; top: 14px; color: var(--readout); text-decoration: none; font: 700 12px var(--font); letter-spacing: .08em; text-transform: uppercase; background: rgba(2,3,10,.72); border: 1px solid rgba(254,249,195,.28); border-radius: 999px; padding: 8px 10px; }
-    .instrument-wrap { width: min(100vw, 720px); height: 100svh; position: relative; padding: max(8px, env(safe-area-inset-top)) 8px max(76px, env(safe-area-inset-bottom)); box-sizing: border-box; display: grid; place-items: center; }
-    svg { display: block; width: 100%; max-height: calc(100svh - 96px); height: auto; user-select: none; touch-action: manipulation; }
-    .static-band { fill: var(--fg); fill-rule: evenodd; opacity: .035; }
-    .static-ring { fill: none; stroke: var(--fg); stroke-width: 1.35; stroke-linejoin: round; opacity: .13; }
-    .static-spoke { fill: none; stroke: var(--fg); stroke-width: 1.25; stroke-linecap: round; opacity: .1; }
-    .selected-band { fill: var(--accent); fill-rule: evenodd; opacity: 0; transition: opacity 90ms linear; pointer-events: none; }
-    .selected-ring { fill: none; stroke: var(--accent-strong); stroke-width: 2.1; stroke-linejoin: round; opacity: 0; transition: opacity 90ms linear; pointer-events: none; }
-    .selected-spoke { fill: none; stroke: var(--accent); stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity 90ms linear; pointer-events: none; }
-    .selected-lock { fill: none; stroke: var(--readout); stroke-width: 2.25; opacity: 0; transition: opacity 90ms linear; pointer-events: none; }
-    .point { fill: var(--fg); stroke: var(--bg); stroke-width: 1.2; r: 7.2; opacity: .86; cursor: pointer; transition: opacity 90ms linear, r 90ms linear, fill 90ms linear; }
-    .point.selected { fill: var(--readout); r: 11.2; opacity: 1; }
-    .point.same-spoke { fill: var(--accent-strong); r: 7.25; opacity: .72; }
-    .point.same-ring { fill: var(--accent-strong); r: 7.05; opacity: .58; }
-    .point.same-band { fill: var(--fg); r: 6.7; opacity: .42; }
-    .point.other { fill: var(--fg); r: 5.7; opacity: .19; }
-    .origin { fill: var(--fg); opacity: .34; pointer-events: none; cursor: default; }
-    text { fill: var(--fg); font-family: var(--font); paint-order: stroke; stroke: var(--bg); stroke-width: 4.6; stroke-linejoin: round; }
-    .operator-label { font-size: 16px; font-weight: 520; letter-spacing: .01em; opacity: .58; transition: opacity 90ms linear, font-weight 90ms linear, fill 90ms linear; }
-    .operator-label.active { fill: var(--readout); font-weight: 720; opacity: 1; }
-    .orientation-label { font-size: 15px; font-weight: 520; opacity: .48; transition: opacity 90ms linear, font-weight 90ms linear, fill 90ms linear; }
-    .orientation-label.active { fill: var(--readout); font-weight: 700; opacity: .96; }
-    .remainder-label { font-size: 14px; font-weight: 520; opacity: 0; transition: opacity 90ms linear, font-weight 90ms linear, fill 90ms linear; }
-    .remainder-label.visible { opacity: .7; }
-    .remainder-label.active { fill: var(--readout); font-weight: 740; opacity: 1; }
-    .readout { position: fixed; left: max(12px, env(safe-area-inset-left)); right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); min-height: 48px; display: flex; align-items: center; justify-content: center; padding: 10px 12px; box-sizing: border-box; border: 1px solid rgba(254,249,195,.42); border-radius: 14px; background: rgba(2,3,10,.88); color: var(--readout); text-align: center; font-size: clamp(16px, 4.2vw, 22px); line-height: 1.24; font-weight: 650; letter-spacing: .005em; opacity: 0; transition: opacity 90ms linear; white-space: normal; text-wrap: balance; box-shadow: 0 0 0 1px rgba(103,232,249,.13); pointer-events: none; }
-    .readout.visible { opacity: 1; }
-    @media (max-width: 520px) { .instrument-wrap { width: 108vw; transform: translateY(-8px); } svg { max-height: calc(100svh - 104px); } }
+    :root {
+      --bg: #08070b;
+      --paper: #fffaf0;
+      --ink: #1d1712;
+      --gold: #d8a64d;
+      --gold-bright: #ffe2a0;
+      --cyan: #77e7ff;
+      --violet: #c7b7ff;
+      --green: #a9f5c8;
+      --line: rgba(255, 250, 240, .26);
+      --soft: rgba(255, 250, 240, .72);
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; min-height: 100%; background: var(--bg); color: var(--paper); font-family: var(--font); -webkit-tap-highlight-color: transparent; }
+    body {
+      min-height: 100svh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 8%, rgba(216,166,77,.28), transparent 25rem),
+        radial-gradient(circle at 80% 18%, rgba(119,231,255,.16), transparent 26rem),
+        linear-gradient(135deg, #050409 0%, #17101d 55%, #060507 100%);
+    }
+    .shell { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; padding: max(12px, env(safe-area-inset-top)) 14px 8px; z-index: 5; }
+    .book-link, .hint { color: var(--gold-bright); text-decoration:none; font: 800 11px var(--font); letter-spacing:.09em; text-transform:uppercase; background: rgba(8,7,11,.74); border:1px solid rgba(255,226,160,.34); border-radius:999px; padding:9px 11px; backdrop-filter: blur(14px); }
+    .hint { color: rgba(255,250,240,.66); border-color: rgba(255,250,240,.14); font-weight:700; }
+    .stage { min-height:0; display:grid; place-items:center; padding: 0 10px; }
+    .instrument-card { width:min(100%, 980px); height:100%; min-height:0; display:grid; grid-template-columns: minmax(0, 1fr) minmax(250px, 320px); gap: 16px; align-items:center; }
+    .viz-wrap { min-width:0; min-height:0; display:grid; place-items:center; }
+    svg { width: min(100%, 680px); height:auto; max-height: calc(100svh - 138px); display:block; user-select:none; touch-action: manipulation; filter: drop-shadow(0 24px 60px rgba(0,0,0,.38)); }
+    .panel { align-self:center; border:1px solid rgba(255,250,240,.18); border-radius:24px; padding:20px; background:rgba(8,7,11,.62); backdrop-filter: blur(18px); box-shadow:0 24px 70px rgba(0,0,0,.28); }
+    .eyebrow { margin:0 0 8px; font:800 11px var(--font); letter-spacing:.14em; text-transform:uppercase; color:var(--gold-bright); }
+    .title { margin:0; font: 650 clamp(28px,4vw,44px)/.95 var(--serif); letter-spacing:-.05em; color:var(--paper); }
+    .formula { margin:14px 0 0; color:rgba(255,250,240,.78); font:700 14px/1.55 var(--font); }
+    .readout { margin-top:16px; min-height:112px; border-radius:18px; border:1px solid rgba(255,226,160,.26); background:rgba(255,250,240,.07); padding:16px; }
+    .readout .id { color:var(--gold-bright); font:900 12px var(--font); letter-spacing:.16em; text-transform:uppercase; }
+    .readout .name { margin-top:8px; font:750 24px/1.05 var(--serif); letter-spacing:-.025em; color:var(--paper); }
+    .readout .coord { margin-top:10px; color:rgba(255,250,240,.74); font:700 13px/1.45 var(--font); }
+    .readout.empty { color:rgba(255,250,240,.58); font:700 14px/1.45 var(--font); }
+    .legend { display:grid; gap:8px; margin-top:16px; color:rgba(255,250,240,.65); font:650 12px/1.35 var(--font); }
+    .legend span { display:flex; align-items:center; gap:8px; }
+    .dot { width:10px; height:10px; border-radius:50%; background:var(--gold-bright); box-shadow:0 0 20px rgba(255,226,160,.5); }
+    .dot.cyan { background:var(--cyan); }
+    .dot.violet { background:var(--violet); }
+    .dot.green { background:var(--green); }
+
+    .static-band { fill: #fffaf0; fill-rule: evenodd; opacity: .045; }
+    .static-ring { fill: none; stroke: rgba(255,250,240,.32); stroke-width: 1.5; stroke-linejoin: round; }
+    .static-spoke { fill: none; stroke: rgba(255,250,240,.26); stroke-width: 1.35; stroke-linecap: round; }
+    .selected-band { fill: var(--gold); fill-rule: evenodd; opacity:0; transition: opacity 130ms ease; pointer-events:none; }
+    .selected-ring { fill:none; stroke: var(--violet); stroke-width:3; stroke-linejoin:round; opacity:0; transition:opacity 130ms ease; pointer-events:none; filter: drop-shadow(0 0 10px rgba(199,183,255,.55)); }
+    .selected-spoke { fill:none; stroke: var(--cyan); stroke-width:3.2; stroke-linecap:round; opacity:0; transition:opacity 130ms ease; pointer-events:none; filter: drop-shadow(0 0 12px rgba(119,231,255,.48)); }
+    .selected-lock { fill:rgba(255,226,160,.13); stroke:var(--gold-bright); stroke-width:2.8; opacity:0; transition:opacity 130ms ease; pointer-events:none; filter: drop-shadow(0 0 14px rgba(255,226,160,.62)); }
+    .point { fill:#fffaf0; stroke:#08070b; stroke-width:1.6; r:7.8; opacity:.9; cursor:pointer; transition: opacity 130ms ease, r 130ms ease, fill 130ms ease; }
+    .point.selected { fill:var(--gold-bright); r:12.5; opacity:1; }
+    .point.same-spoke { fill:var(--cyan); r:8.6; opacity:.86; }
+    .point.same-ring { fill:var(--violet); r:8.3; opacity:.76; }
+    .point.same-band { fill:var(--green); r:7.3; opacity:.54; }
+    .point.other { fill:#fffaf0; r:5.6; opacity:.26; }
+    .origin { fill:#fffaf0; opacity:.48; pointer-events:none; }
+    text { fill:#fffaf0; font-family:var(--font); paint-order:stroke; stroke:#08070b; stroke-width:5.5; stroke-linejoin:round; }
+    .operator-label { font-size:17px; font-weight:760; opacity:.76; transition:opacity 130ms ease, fill 130ms ease; }
+    .operator-label.active { fill:var(--gold-bright); opacity:1; }
+    .orientation-label { font-size:15px; font-weight:800; opacity:.62; transition:opacity 130ms ease, fill 130ms ease; }
+    .orientation-label.active { fill:var(--cyan); opacity:1; }
+    .remainder-label { font-size:14px; font-weight:800; opacity:0; transition:opacity 130ms ease, fill 130ms ease; }
+    .remainder-label.visible { opacity:.72; }
+    .remainder-label.active { fill:var(--gold-bright); opacity:1; }
+
+    @media (max-width: 800px) {
+      body { overflow:auto; }
+      .shell { min-height:100svh; }
+      .topbar { position:sticky; top:0; background:rgba(8,7,11,.82); backdrop-filter:blur(18px); border-bottom:1px solid rgba(255,250,240,.1); }
+      .hint { display:none; }
+      .stage { padding: 8px 8px max(14px, env(safe-area-inset-bottom)); }
+      .instrument-card { height:auto; grid-template-columns:1fr; gap:10px; }
+      .panel { order:2; padding:16px; border-radius:20px; }
+      .viz-wrap { order:1; min-height: 0; }
+      svg { width:min(100%, 96svw); max-height: min(60svh, 560px); }
+      .title { font-size:32px; }
+      .readout { min-height:92px; padding:14px; }
+      .readout .name { font-size:22px; }
+      .formula, .legend { font-size:12px; }
+    }
+    @media (max-width: 420px) {
+      .book-link { font-size:10px; padding:8px 10px; }
+      .stage { padding-left:6px; padding-right:6px; }
+      svg { width: 104svw; max-width:none; transform: translateX(-2svw); }
+      .panel { margin:0 2px; }
+      .operator-label { font-size:15px; }
+      .orientation-label { font-size:13px; }
+      .remainder-label { font-size:12px; }
+    }
   </style>
 </head>
 <body>
-  <a class="book-link" href="./">← Book</a>
-  <main class="instrument-wrap">
-    <svg id="instrument" viewBox="0 0 760 760" role="img" aria-label="Atlas of Remainders 54-position radial instrument"></svg>
-    <div id="readout" class="readout" aria-live="polite"></div>
-  </main>
+  <div class="shell">
+    <header class="topbar">
+      <a class="book-link" href="./">← Back to book</a>
+      <div class="hint">Tap a point · tap again to unlock</div>
+    </header>
+    <main class="stage">
+      <section class="instrument-card" aria-label="Interactive atlas instrument">
+        <div class="viz-wrap"><svg id="instrument" viewBox="0 0 760 760" role="img" aria-label="Atlas of Remainders 54-position radial instrument"></svg></div>
+        <aside class="panel">
+          <p class="eyebrow">Atlas instrument</p>
+          <h1 class="title">The 54 Landings</h1>
+          <p class="formula">Operator · Orientation · Remainder → Invariant</p>
+          <div id="readout" class="readout empty" aria-live="polite">Tap any point to reveal its coordinate and invariant.</div>
+          <div class="legend" aria-hidden="true">
+            <span><i class="dot"></i> Selected invariant</span>
+            <span><i class="dot cyan"></i> Same operator spoke</span>
+            <span><i class="dot violet"></i> Same remainder ring</span>
+            <span><i class="dot green"></i> Same orientation band</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </div>
 <script>
 const SVG_NS="http://www.w3.org/2000/svg";
-const RADII=[44,66,88,130,152,174,216,238,260];
+const RADII=[48,72,96,140,164,188,232,256,280];
 const ANGLES=[0,60,120,180,240,300];
 const OPERATORS=["Distinction","Expansion","Relation","Correction","Integration","Closure"];
 const ORIENTATIONS=["Toward","Across","Away"];
@@ -68,12 +150,12 @@ function buildPoints(){const output=[];let id=1;for(let ring=1;ring<=9;ring++){f
 function ringPath(ring){const ringPoints=points.filter(p=>p.ring===ring).sort((a,b)=>a.spoke-b.spoke);return ringPoints.map((p,i)=>`${i===0?"M":"L"} ${p.x} ${p.y}`).join(" ")+" Z";}
 function spokePath(spoke){const spokePoints=points.filter(p=>p.spoke===spoke).sort((a,b)=>a.ring-b.ring);return spokePoints.map((p,i)=>`${i===0?"M":"L"} ${p.x} ${p.y}`).join(" ");}
 function hexBandPath(innerRadius,outerRadius){const outer=ANGLES.map(a=>polarToCartesian(outerRadius,a));const inner=[...ANGLES].reverse().map(a=>polarToCartesian(innerRadius,a));return[outer.map((p,i)=>`${i===0?"M":"L"} ${p.x} ${p.y}`).join(" "),"Z",inner.map((p,i)=>`${i===0?"M":"L"} ${p.x} ${p.y}`).join(" "),"Z"].join(" ");}
-function bandBounds(band){const radii=ringsForBand(band).map(r=>RADII[r-1]);return{inner:radii[0]-11,outer:radii[2]+11,mid:(radii[0]+radii[2])/2};}
+function bandBounds(band){const radii=ringsForBand(band).map(r=>RADII[r-1]);return{inner:radii[0]-14,outer:radii[2]+14,mid:(radii[0]+radii[2])/2};}
 function textAnchorForAngle(angle){if(angle===0)return"start";if(angle===180)return"end";return"middle";}
 function baselineForAngle(angle){if(angle===60||angle===120)return"baseline";if(angle===240||angle===300)return"hanging";return"middle";}
 function pointState(point,selected){if(!selected)return"idle";if(point.id===selected.id)return"selected";if(point.spoke===selected.spoke)return"same-spoke";if(point.ring===selected.ring)return"same-ring";if(point.band===selected.band)return"same-band";return"other";}
-function render(){svg.appendChild(el("rect",{width:VIEWBOX,height:VIEWBOX,fill:"#02030a"}));const staticBands=el("g");[0,1,2].forEach(b=>{const bounds=bandBounds(b);staticBands.appendChild(el("path",{class:"static-band",d:hexBandPath(bounds.inner,bounds.outer)}));});svg.appendChild(staticBands);const staticRings=el("g");RADII.forEach((_,i)=>staticRings.appendChild(el("path",{class:"static-ring",d:ringPath(i+1)})));svg.appendChild(staticRings);const staticSpokes=el("g");ANGLES.forEach((_,spoke)=>staticSpokes.appendChild(el("path",{class:"static-spoke",d:spokePath(spoke)})));svg.appendChild(staticSpokes);elements.selectedBand=el("path",{class:"selected-band"});elements.selectedRing=el("path",{class:"selected-ring"});elements.selectedSpoke=el("path",{class:"selected-spoke"});elements.selectedLock=el("circle",{class:"selected-lock",r:16});svg.appendChild(elements.selectedBand);svg.appendChild(elements.selectedRing);svg.appendChild(elements.selectedSpoke);svg.appendChild(elements.selectedLock);const operatorGroup=el("g");ANGLES.forEach((angle,spoke)=>{const position=polarToCartesian(OUTER_RADIUS+34,angle);const label=el("text",{class:"operator-label",x:position.x,y:position.y,"text-anchor":textAnchorForAngle(angle),"dominant-baseline":baselineForAngle(angle)});label.textContent=OPERATORS[spoke];elements.operatorLabels[spoke]=label;operatorGroup.appendChild(label);});svg.appendChild(operatorGroup);const orientationGroup=el("g");[0,1,2].forEach(band=>{const bounds=bandBounds(band);const position=polarToCartesian(bounds.mid,-26);const label=el("text",{class:"orientation-label",x:position.x+16,y:position.y,"text-anchor":"start","dominant-baseline":"middle"});label.textContent=ORIENTATIONS[band];elements.orientationLabels[band]=label;orientationGroup.appendChild(label);});svg.appendChild(orientationGroup);const remainderGroup=el("g");[0,1,2].forEach(band=>{ringsForBand(band).forEach(ring=>{const radius=RADII[ring-1],position=polarToCartesian(radius,-8);const label=el("text",{class:"remainder-label",x:position.x+14,y:position.y,"text-anchor":"start","dominant-baseline":"middle"});label.textContent=remainderForRing(ring);elements.remainderLabels.set(ring,label);remainderGroup.appendChild(label);});});svg.appendChild(remainderGroup);svg.appendChild(el("circle",{class:"origin",cx:CX,cy:CY,r:4.8}));const pointGroup=el("g");points.forEach(point=>{const node=el("circle",{class:"point",cx:point.x,cy:point.y,r:7.2,tabindex:0,role:"button","aria-label":`${invariantLabel(point.invariantId)}, ${OPERATORS[point.spoke]}, ${ORIENTATIONS[point.band]}, ${remainderForRing(point.ring)}, ${invariantTitle(point.invariantId)}`});node.addEventListener("mouseenter",()=>{hoveredId=point.id;updateState();});node.addEventListener("focus",()=>{hoveredId=point.id;updateState();});node.addEventListener("mouseleave",()=>{hoveredId=null;updateState();});node.addEventListener("blur",()=>{hoveredId=null;updateState();});node.addEventListener("click",()=>{lockedId=lockedId===point.id?null:point.id;updateState();});node.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();lockedId=lockedId===point.id?null:point.id;updateState();}});elements.points.set(point.id,node);pointGroup.appendChild(node);});svg.appendChild(pointGroup);svg.addEventListener("mouseleave",()=>{hoveredId=null;updateState();});}
-function updateState(){const activeId=hoveredId??lockedId;const selected=activeId?points.find(p=>p.id===activeId):null;points.forEach(point=>{elements.points.get(point.id).setAttribute("class",`point ${pointState(point,selected)}`);});elements.operatorLabels.forEach((label,spoke)=>label.setAttribute("class",selected&&selected.spoke===spoke?"operator-label active":"operator-label"));elements.orientationLabels.forEach((label,band)=>label.setAttribute("class",selected&&selected.band===band?"orientation-label active":"orientation-label"));elements.remainderLabels.forEach((label,ring)=>{let c="remainder-label";if(selected&&bandIndexForRing(ring)===selected.band)c+=" visible";if(selected&&ring===selected.ring)c+=" active";label.setAttribute("class",c);});if(selected){const bounds=bandBounds(selected.band);elements.selectedBand.setAttribute("d",hexBandPath(bounds.inner,bounds.outer));elements.selectedBand.style.opacity="0.13";elements.selectedRing.setAttribute("d",ringPath(selected.ring));elements.selectedRing.style.opacity="0.92";elements.selectedSpoke.setAttribute("d",spokePath(selected.spoke));elements.selectedSpoke.style.opacity="0.9";elements.selectedLock.setAttribute("cx",selected.x);elements.selectedLock.setAttribute("cy",selected.y);elements.selectedLock.style.opacity="1";readout.textContent=`${invariantLabel(selected.invariantId)} · ${OPERATORS[selected.spoke]} · ${ORIENTATIONS[selected.band]} · ${remainderForRing(selected.ring)} — ${invariantTitle(selected.invariantId)}`;readout.classList.add("visible");}else{elements.selectedBand.style.opacity="0";elements.selectedRing.style.opacity="0";elements.selectedSpoke.style.opacity="0";elements.selectedLock.style.opacity="0";readout.textContent="";readout.classList.remove("visible");}}
+function render(){svg.appendChild(el("rect",{width:VIEWBOX,height:VIEWBOX,fill:"transparent"}));const staticBands=el("g");[0,1,2].forEach(b=>{const bounds=bandBounds(b);staticBands.appendChild(el("path",{class:"static-band",d:hexBandPath(bounds.inner,bounds.outer)}));});svg.appendChild(staticBands);const staticRings=el("g");RADII.forEach((_,i)=>staticRings.appendChild(el("path",{class:"static-ring",d:ringPath(i+1)})));svg.appendChild(staticRings);const staticSpokes=el("g");ANGLES.forEach((_,spoke)=>staticSpokes.appendChild(el("path",{class:"static-spoke",d:spokePath(spoke)})));svg.appendChild(staticSpokes);elements.selectedBand=el("path",{class:"selected-band"});elements.selectedRing=el("path",{class:"selected-ring"});elements.selectedSpoke=el("path",{class:"selected-spoke"});elements.selectedLock=el("circle",{class:"selected-lock",r:18});svg.appendChild(elements.selectedBand);svg.appendChild(elements.selectedRing);svg.appendChild(elements.selectedSpoke);svg.appendChild(elements.selectedLock);const operatorGroup=el("g");ANGLES.forEach((angle,spoke)=>{const position=polarToCartesian(OUTER_RADIUS+42,angle);const label=el("text",{class:"operator-label",x:position.x,y:position.y,"text-anchor":textAnchorForAngle(angle),"dominant-baseline":baselineForAngle(angle)});label.textContent=OPERATORS[spoke];elements.operatorLabels[spoke]=label;operatorGroup.appendChild(label);});svg.appendChild(operatorGroup);const orientationGroup=el("g");[0,1,2].forEach(band=>{const bounds=bandBounds(band);const position=polarToCartesian(bounds.mid,-25);const label=el("text",{class:"orientation-label",x:position.x+18,y:position.y,"text-anchor":"start","dominant-baseline":"middle"});label.textContent=ORIENTATIONS[band];elements.orientationLabels[band]=label;orientationGroup.appendChild(label);});svg.appendChild(orientationGroup);const remainderGroup=el("g");[0,1,2].forEach(band=>{ringsForBand(band).forEach(ring=>{const radius=RADII[ring-1],position=polarToCartesian(radius,-8);const label=el("text",{class:"remainder-label",x:position.x+15,y:position.y,"text-anchor":"start","dominant-baseline":"middle"});label.textContent=remainderForRing(ring);elements.remainderLabels.set(ring,label);remainderGroup.appendChild(label);});});svg.appendChild(remainderGroup);svg.appendChild(el("circle",{class:"origin",cx:CX,cy:CY,r:5.2}));const pointGroup=el("g");points.forEach(point=>{const node=el("circle",{class:"point",cx:point.x,cy:point.y,r:7.8,tabindex:0,role:"button","aria-label":`${invariantLabel(point.invariantId)}, ${OPERATORS[point.spoke]}, ${ORIENTATIONS[point.band]}, ${remainderForRing(point.ring)}, ${invariantTitle(point.invariantId)}`});node.addEventListener("mouseenter",()=>{hoveredId=point.id;updateState();});node.addEventListener("focus",()=>{hoveredId=point.id;updateState();});node.addEventListener("mouseleave",()=>{hoveredId=null;updateState();});node.addEventListener("blur",()=>{hoveredId=null;updateState();});node.addEventListener("click",()=>{lockedId=lockedId===point.id?null:point.id;updateState();});node.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();lockedId=lockedId===point.id?null:point.id;updateState();}});elements.points.set(point.id,node);pointGroup.appendChild(node);});svg.appendChild(pointGroup);svg.addEventListener("mouseleave",()=>{hoveredId=null;updateState();});}
+function updateState(){const activeId=hoveredId??lockedId;const selected=activeId?points.find(p=>p.id===activeId):null;points.forEach(point=>{elements.points.get(point.id).setAttribute("class",`point ${pointState(point,selected)}`);});elements.operatorLabels.forEach((label,spoke)=>label.setAttribute("class",selected&&selected.spoke===spoke?"operator-label active":"operator-label"));elements.orientationLabels.forEach((label,band)=>label.setAttribute("class",selected&&selected.band===band?"orientation-label active":"orientation-label"));elements.remainderLabels.forEach((label,ring)=>{let c="remainder-label";if(selected&&bandIndexForRing(ring)===selected.band)c+=" visible";if(selected&&ring===selected.ring)c+=" active";label.setAttribute("class",c);});if(selected){const bounds=bandBounds(selected.band);elements.selectedBand.setAttribute("d",hexBandPath(bounds.inner,bounds.outer));elements.selectedBand.style.opacity="0.16";elements.selectedRing.setAttribute("d",ringPath(selected.ring));elements.selectedRing.style.opacity="1";elements.selectedSpoke.setAttribute("d",spokePath(selected.spoke));elements.selectedSpoke.style.opacity="1";elements.selectedLock.setAttribute("cx",selected.x);elements.selectedLock.setAttribute("cy",selected.y);elements.selectedLock.style.opacity="1";readout.className="readout";readout.innerHTML=`<div class="id">${invariantLabel(selected.invariantId)}</div><div class="name">${invariantTitle(selected.invariantId)}</div><div class="coord">${OPERATORS[selected.spoke]} · ${ORIENTATIONS[selected.band]} · ${remainderForRing(selected.ring)}</div>`;}else{elements.selectedBand.style.opacity="0";elements.selectedRing.style.opacity="0";elements.selectedSpoke.style.opacity="0";elements.selectedLock.style.opacity="0";readout.className="readout empty";readout.textContent="Tap any point to reveal its coordinate and invariant.";}}
 </script>
 </body>
 </html>
