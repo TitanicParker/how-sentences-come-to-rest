@@ -21,10 +21,10 @@ This book is not a taxonomy of meanings. It is a field guide to landings. Each i
 - [`parts/01-distinction.md`](./parts/01-distinction.md) — Distinction chapters, I01–I09.
 - [`parts/02-expansion.md`](./parts/02-expansion.md) — Expansion chapters, I10–I18.
 - [`parts/03-relation.md`](./parts/03-relation.md) — Relation chapters, I19–I27.
+- [`parts/04-correction.md`](./parts/04-correction.md) — Correction chapters, I28–I36.
 
 ## Remaining parts
 
-- `parts/04-correction.md` — Correction chapters, I28–I36.
 - `parts/05-integration.md` — Integration chapters, I37–I45.
 - `parts/06-closure.md` — Closure chapters, I46–I54.
 
