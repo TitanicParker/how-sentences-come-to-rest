@@ -25,6 +25,30 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Prepare Book II part pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in books/02-atlas-of-remainders/parts/*.md; do
+            base="$(basename "$file" .md)"
+            dir="books/02-atlas-of-remainders/parts/$base"
+            title="$(head -n 1 "$file" | sed 's/^# *//')"
+            mkdir -p "$dir"
+            {
+              echo "---"
+              echo "title: $title"
+              echo "book: II"
+              echo "book_class: book-two"
+              echo "---"
+              echo ""
+              cat "$file"
+              echo ""
+              echo "---"
+              echo ""
+              echo "[Return to Book II](../../) · [Return to Book I](../../../../)"
+            } > "$dir/index.md"
+          done
+
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
