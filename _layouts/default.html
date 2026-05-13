@@ -1,5 +1,9 @@
 <!doctype html>
 <html lang="en">
+  {% assign is_book_two = false %}
+  {% if page.book_class == 'book-two' or page.path contains 'books/02-atlas-of-remainders' %}
+    {% assign is_book_two = true %}
+  {% endif %}
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,11 +17,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
-    {% if page.book_class == 'book-two' %}
+    {% if is_book_two %}
     <link rel="stylesheet" href="{{ '/assets/css/book-two.css' | relative_url }}">
     {% endif %}
   </head>
-  <body{% if page.book_class %} class="{{ page.book_class }}"{% endif %}>
+  <body{% if is_book_two %} class="book-two"{% elsif page.book_class %} class="{{ page.book_class }}"{% endif %}>
     <a class="skip-link" href="#main-content">Skip to book text</a>
     <div class="reading-progress" aria-hidden="true"><span id="reading-progress-bar"></span></div>
 
