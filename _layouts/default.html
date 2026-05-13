@@ -13,8 +13,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    {% if page.book_class == 'book-two' %}
+    <link rel="stylesheet" href="{{ '/assets/css/book-two.css' | relative_url }}">
+    {% endif %}
   </head>
-  <body>
+  <body{% if page.book_class %} class="{{ page.book_class }}"{% endif %}>
     <a class="skip-link" href="#main-content">Skip to book text</a>
     <div class="reading-progress" aria-hidden="true"><span id="reading-progress-bar"></span></div>
 
@@ -27,6 +30,7 @@
           <a href="{{ '/chapter-12/' | relative_url }}">Atlas</a>
           <a href="{{ '/instrument.html' | relative_url }}">Instrument</a>
           <a href="{{ '/landing-instrument.html' | relative_url }}">Sentence Tool</a>
+          <a href="{{ '/books/02-atlas-of-remainders/' | relative_url }}">Book II</a>
         </nav>
       </aside>
 
@@ -53,6 +57,7 @@
         if (event.key === 'a') window.location.href = '{{ '/chapter-12/' | relative_url }}';
         if (event.key === 'i') window.location.href = '{{ '/instrument.html' | relative_url }}';
         if (event.key === 's') window.location.href = '{{ '/landing-instrument.html' | relative_url }}';
+        if (event.key === '2') window.location.href = '{{ '/books/02-atlas-of-remainders/' | relative_url }}';
       });
     </script>
   </body>
