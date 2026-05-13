@@ -1,10 +1,6 @@
 name: Build PDF edition
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - book.pdf
   workflow_dispatch:
 
 permissions:
