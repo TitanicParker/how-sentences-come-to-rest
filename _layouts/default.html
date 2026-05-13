@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <base href="{{ '/' | relative_url }}">
     <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
     <meta name="description" content="{{ site.description }}">
     <meta name="theme-color" content="#08070b">
@@ -27,6 +26,7 @@
           <a href="{{ '/chapter-01/' | relative_url }}">Begin</a>
           <a href="{{ '/chapter-12/' | relative_url }}">Atlas</a>
           <a href="{{ '/instrument.html' | relative_url }}">Instrument</a>
+          <a href="{{ '/landing-instrument.html' | relative_url }}">Sentence Tool</a>
         </nav>
       </aside>
 
@@ -52,6 +52,7 @@
         if (event.key === 'g') window.location.href = '{{ '/' | relative_url }}';
         if (event.key === 'a') window.location.href = '{{ '/chapter-12/' | relative_url }}';
         if (event.key === 'i') window.location.href = '{{ '/instrument.html' | relative_url }}';
+        if (event.key === 's') window.location.href = '{{ '/landing-instrument.html' | relative_url }}';
       });
     </script>
   </body>
