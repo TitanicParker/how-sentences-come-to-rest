@@ -14,7 +14,8 @@ This book is not a taxonomy of meanings. It is a field guide to landings. Each i
 
 ## Working files
 
-- [`manuscript.md`](./manuscript.md) — main working manuscript.
+- [`manuscript.md`](./manuscript.md) — main working manuscript, currently containing the preface, method, Distinction, and Expansion.
+- [`parts/03-relation.md`](./parts/03-relation.md) — drafted Relation chapters, I19–I27.
 
 ## Chapter method
 
