@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Part VI — Closure · The Atlas of Remainders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../assets/css/style.css">
+  <link rel="stylesheet" href="../../../../assets/css/book-two.css">
+</head>
+<body class="book-two">
+  <a class="skip-link" href="#main-content">Skip to book text</a>
+  <div class="reading-progress" aria-hidden="true"><span id="reading-progress-bar"></span></div>
+  <div class="page-shell">
+    <aside class="site-rail" aria-label="Book navigation">
+      <a class="site-mark" href="../../../../" aria-label="How Sentences Come to Rest home">HSCR</a>
+      <nav class="rail-nav">
+        <a href="../../../../">Contents</a>
+        <a href="../../">Book II</a>
+        <a href="../../../../instrument.html">Instrument</a>
+      </nav>
+    </aside>
+    <main id="main-content" class="book-page"><article id="markdown-content" class="book-card"><h1>Part VI — Closure</h1><p>Loading chapter text…</p></article></main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    const source = '../06-closure.md';
+    const target = document.getElementById('markdown-content');
+    marked.setOptions({ mangle: false, headerIds: true });
+    fetch(source).then(r => r.ok ? r.text() : Promise.reject(r.status)).then(md => {
+      target.innerHTML = marked.parse(md) + '<hr><p><a href="../../">Return to Book II</a> · <a href="../05-integration/">Previous: Integration</a></p>';
+      updateProgress();
+    }).catch(() => { target.innerHTML = '<h1>Part VI — Closure</h1><p>The chapter source could not be loaded.</p>'; });
+    const bar = document.getElementById('reading-progress-bar');
+    function updateProgress() { const max = document.documentElement.scrollHeight - window.innerHeight; const pct = max > 0 ? Math.min(1, window.scrollY / max) : 0; bar.style.transform = `scaleX(${pct})`; }
+    updateProgress(); window.addEventListener('scroll', updateProgress, { passive: true }); window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>
