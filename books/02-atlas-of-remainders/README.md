@@ -12,6 +12,11 @@ The governing spine is:
 
 This book is not a taxonomy of meanings. It is a field guide to landings. Each invariant chapter should cultivate the invariant from a seed, show why it must be produced by its coordinate, and define it exactly by what it is not.
 
+## Styled reading layer
+
+- [`index.html`](./index.html) — styled Book II landing page.
+- [`style.css`](./style.css) — progressed colour system for Book II.
+
 ## Working files
 
 - [`manuscript.md`](./manuscript.md) — main working manuscript and front-matter draft.
